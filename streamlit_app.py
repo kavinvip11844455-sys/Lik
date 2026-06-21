@@ -1,36 +1,64 @@
 import streamlit as st
-import openai
-from fpdf import FPDF
-import datetime
+import google.generativeai as genai
 
-st.set_page_config(page_title="Love Insurance Kompany", page_icon="💘")
+st.set_page_config(page_title="Love Insurance Kompany 600/600", page_icon="💘", layout="centered")
 
-st.title("💘 Love Insurance Kompany 💘")
+# Gemini setup
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+st.title("💘 Love Insurance Kompany 600/600")
+st.subheader("Chairman Alazhu Moon Araki ⚖️🐠🪙")
 st.caption("Powered by kavin.r | Manasu odanjadhu ku claim kedayadhu 😂")
 
-client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+st.markdown("---")
 
-name1 = st.text_input("Peru 1:", "Chairman")
-name2 = st.text_input("Peru 2:", "CEO Kavin")
-chat = st.text_area("Recent Chat:", "dei 600/600 score sollu")
+col1, col2 = st.columns(2)
+with col1:
+    name1 = st.text_input("Peru 1:", placeholder="Chairman")
+with col2:
+    name2 = st.text_input("Peru 2:", placeholder="CEO Kavin")
 
-if st.button("🔮 Breakup Risk Score Paaru"):
-    prompt = f"Act as Chairman Alazhu Moon Araki. Analyze chat between {name1} and {name2}: '{chat}'. Give breakup risk score 0-100. Be funny, Tamil + English. End with G.O. number."
-    
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    result = response.choices[0].message.content
-    st.write(result)
-    
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt="Love Insurance Kompany Certificate", ln=1, align='C')
-    pdf.cell(200, 10, txt=f"{name1} + {name2}", ln=1, align='C')
-    pdf.multi_cell(0, 10, txt=result)
-    pdf.output("certificate.pdf")
-    
-    with open("certificate.pdf", "rb") as f:
-        st.download_button("📜 Insurance Certificate Download Pannu", f, "certificate.pdf")
+situation = st.text_area("Recent Chat:", placeholder="dei 600/600 score sollu")
+
+if st.button("🔮 Breakup Risk Score Paaru", type="primary"):
+    if not name1 or not name2 or not situation:
+        st.error("DEI 600/600! Ella column ah fill pannu da!")
+    else:
+        with st.spinner("Chairman Alazhu Moon Araki Case ah aaraayuraar... ⚖️"):
+            prompt = f"""
+            Nee Chairman Alazhu Moon Araki. Love Insurance Kompany oda Chairman. 
+            Unoda style: Comedy ah pesuva, "600/600" nu solluva, "DEI" nu thituva, gavel ah kuthuva.
+            G.O. nu order poduva.
+
+            Case:
+            Peru 1: {name1}
+            Peru 2: {name2}
+            Situation: {situation}
+
+            4 vishayam sollu:
+            1. **Breakup Risk Score:** 0/600 to 600/600. 600 = full breakup.
+            2. **Chairman Order G.O. No. XXX/600:** 2 line advice kudu.
+            3. **Kompany Verdict:** "Policy Approve" or "Claim Reject" or "Premium Kattunga"
+            4. **Chairman Punch:** "DEI" nu start panni oru comedy dialogue.
+
+            Tamil la sollu. Emojis podu. 600/600 style la irukkanum.
+            """
+            
+            try:
+                response = model.generate_content(prompt)
+                st.success("Chairman Order Vandhuduchu! 600/600 ⚖️")
+                st.markdown(response.text)
+                st.balloons()
+                st.info("**Disclaimer:** Idhu comedy app da 600/600 😂")
+            except Exception as e:
+                st.error(f"DEI 600/600! Chairman busy: {str(e)}")
+                st.warning("Secrets la GEMINI_API_KEY sariya iruka nu paaru.")
+
+st.sidebar.markdown("### 📜 Kompany Rules")
+st.sidebar.markdown("1. Kaadhal = Investment")
+st.sidebar.markdown("2. Sanda = Market Crash") 
+st.sidebar.markdown("3. Chairman Sonna 600/600")
+st.sidebar.markdown("---")
+st.sidebar.markdown("**Powered by Gemini AI** 🔮")
+st.sidebar.markdown("**Free Plan** ✅ 0/600 Cost")
