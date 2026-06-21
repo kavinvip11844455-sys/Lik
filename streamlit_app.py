@@ -4,8 +4,9 @@ from fpdf import FPDF
 import base64
 
 st.set_page_config(page_title="Love Insurance AI", page_icon="💔", layout="centered")
-st.title("💘 Chairman Alazhu Moon Love Insurance AI 💘")
-st.caption("Powered by kavin.r | G.O. No. 600/600.49: Manasu odanjadhu ku claim kedayadhu 😂")
+st.title("💘 Love Insurance Kompany 💘")
+st.caption("Powered by kavin.r | Manasu odanjadhu ku claim kedayadhu 😂")
+)
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
